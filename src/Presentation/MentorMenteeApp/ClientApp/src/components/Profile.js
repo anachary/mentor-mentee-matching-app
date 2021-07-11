@@ -83,7 +83,7 @@ class Profile extends React.Component {
     github: this.props.user.github,
     personal_website: this.props.user.personal_website,
     mentor_status: this.props.user.mentor_status,
-    will_buy_coffee: this.props.user.will_buy_coffee,
+   
   }
 
   handleChange = event => {
@@ -134,8 +134,7 @@ class Profile extends React.Component {
           linkedin: stateUserData.linkedin,
           github: stateUserData.github,
           personal_website: stateUserData.personal_website,
-          mentor_status: stateUserData.mentor_status,
-          will_buy_coffee: stateUserData.will_buy_coffee,
+          mentor_status: stateUserData.mentor_status
         }
       })
     })
@@ -161,11 +160,6 @@ class Profile extends React.Component {
             value="mentor_status"
             /> Willing to mentor
             <br />
-            <Switch
-              checked={this.state.will_buy_coffee}
-              onChange={this.handleSwitch('will_buy_coffee')}
-              value="will_buy_coffee"
-            /> Willing to buy coffee
             <form className={classes.container} noValidate autoComplete="off" >
               <TextField
                 required

@@ -14,9 +14,9 @@ const App = (props) => {
 
   return (
     <Fragment>
-      <ActionCable
-        channel={{ channel: 'NotificationsChannel' }}
-        onReceived={props.receivedNotifications} />
+      {/*<ActionCable*/}
+      {/*  channel={{ channel: 'NotificationsChannel' }}*/}
+      {/*  onReceived={props.receivedNotifications} />*/}
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
         <Route exact path="/signup" component={Signup} />

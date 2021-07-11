@@ -4,13 +4,14 @@
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:61846",
-      "sslPort": 44312
+      "sslPort": 0
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
+      "launchUrl": "localhost:3000/swagger",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
