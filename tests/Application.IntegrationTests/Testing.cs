@@ -15,6 +15,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MentorMenteeApp.Domain.Entities;
 
 [SetUpFixture]
 public class Testing
@@ -94,14 +95,14 @@ public class Testing
     {
         return await RunAsUserAsync("administrator@local", "Administrator1234!", new[] { "Administrator" });
     }
-
+     
     public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles)
     {
         using var scope = _scopeFactory.CreateScope();
 
-        var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+        var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
 
-        var user = new ApplicationUser { UserName = userName, Email = userName };
+        var user = new User { UserName = userName, Email = userName };
 
         var result = await userManager.CreateAsync(user, password);
 

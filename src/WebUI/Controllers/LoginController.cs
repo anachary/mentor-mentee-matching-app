@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 
 namespace MentorMenteeApp.WebUI.Controllers
 { 
+    [ApiController]
     public class LoginController : Controller
     {
-        [HttpPost("v1/login")]
-        public JsonResult Authenticate([FromBody] ApplicationUser applicationUser)
+        [HttpPost("api/v1/login")]
+        public IActionResult  Authenticate([FromBody]LoginRequestDto loginRequest)
         {
-            var loginResponseDto = new LoginResponseDTO();
-            return Json(loginResponseDto);
+
+            return Ok();
 
         }
     }

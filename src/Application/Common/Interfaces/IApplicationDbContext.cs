@@ -16,6 +16,8 @@ namespace MentorMenteeApp.Application.Common.Interfaces
         public DbSet<MentorMenteeSession> MentorMenteeSessions { get; set; }
 
         public DbSet<MentorMenteeSessionStatus> MenteeSessionStatuses { get; set; }
+        public DbSet<User> Users { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

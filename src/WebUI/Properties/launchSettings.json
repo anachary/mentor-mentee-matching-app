@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:61846",
+      "applicationUrl": "http://localhost:3000",
       "sslPort": 0
     }
   },
@@ -11,31 +11,9 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "localhost:3000/swagger",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:5001;http://+:5000",
-        "ASPNETCORE_HTTPS_PORT": "5001",
-        "UseInMemoryDatabase": "true"
-      },
-      "httpPort": 5000,
-      "useSSL": true,
-      "sslPort": 5001
-    },
-    "MentorMenteeApp": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
 }

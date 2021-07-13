@@ -1,3 +1,4 @@
+using MentorMenteeApp.Domain.Entities;
 using MentorMenteeApp.Infrastructure.Identity;
 using MentorMenteeApp.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,7 @@ namespace MentorMenteeApp.WebUI
                         context.Database.Migrate();
                     }                   
 
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userManager = services.GetRequiredService<UserManager<User>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
                     await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager, roleManager);

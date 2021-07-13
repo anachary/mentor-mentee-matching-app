@@ -1,4 +1,6 @@
-﻿using MentorMenteeApp.Application.Common.Interfaces;
+﻿using IdentityServer4.Models;
+using MentorMenteeApp.Application.Common.Interfaces;
+using MentorMenteeApp.Domain.Entities;
 using MentorMenteeApp.Infrastructure.Identity;
 using MentorMenteeApp.Infrastructure.Persistence;
 using MentorMenteeApp.Infrastructure.Services;
@@ -16,28 +18,45 @@ namespace MentorMenteeApp.Infrastructure
         {
             if (configuration.GetValue<bool>("UseInMemoryDatabase"))
             {
-                   services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(
-                        configuration.GetConnectionString("DefaultConnection"),
-                        b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                services.AddDbContext<ApplicationDbContext>(options =>
+                 options.UseSqlServer(
+                     configuration.GetConnectionString("DefaultConnection"),
+                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             }
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
 
             services
-                .AddDefaultIdentity<ApplicationUser>()
+                .AddDefaultIdentity<User>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddInMemoryClients(new Client[]
+                {
+                    new Client
+                    {
+                        ClientId ="mentor-mentee-app-frontend",
+                        AllowedGrantTypes = GrantTypes.Code,
+                        RedirectUris = new []{"http://localhost:3000"},
+                        PostLogoutRedirectUris= new []{"https://localhost:3000"},
+                        AllowedCorsOrigins = new []{"http://localhost:3000"} ,
+                        RequireConsent = false,
+                        AllowAccessTokensViaBrowser= true,
+                        RequirePkce= true,
+                        RequireClientSecret= false
+                    }
+                })
+                .AddApiAuthorization<User, ApplicationDbContext>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+
 
             services.AddAuthorization(options =>
             {

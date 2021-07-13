@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MentorMenteeApp.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : ApiAuthorizationDbContext<User>, IApplicationDbContext
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
@@ -28,6 +28,7 @@ namespace MentorMenteeApp.Infrastructure.Persistence
             _dateTime = dateTime;
         }
 
+        public DbSet<User> User { get; set; }
         public DbSet<Skill> Skills { get; set; }
 
         public DbSet<SkillGroup> SkillGroups { get; set; }
@@ -37,24 +38,50 @@ namespace MentorMenteeApp.Infrastructure.Persistence
         public DbSet<MentorMenteeSession> MentorMenteeSessions { get; set; }
 
         public DbSet<MentorMenteeSessionStatus> MenteeSessionStatuses { get; set; }
+        DbSet<User> IApplicationDbContext.Users { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())
+            foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry in ChangeTracker.Entries())
             {
-                switch (entry.State)
+                if (entry.Entity is AuditableEntity)
                 {
-                    case EntityState.Added:
-                        entry.Entity.CreatedBy = _currentUserService.UserId;
-                        entry.Entity.Created = _dateTime.Now;
-                        break;
+                    var entity = entry.Entity as AuditableEntity;
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            entity.CreatedBy = _currentUserService.UserId;
+                            entity.Created = _dateTime.Now;
+                            break;
 
-                    case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = _currentUserService.UserId;
-                        entry.Entity.LastModified = _dateTime.Now;
-                        break;
+                        case EntityState.Modified:
+                            entity.LastModifiedBy = _currentUserService.UserId;
+                            entity.LastModified = _dateTime.Now;
+                            break;
+                    }
+                   
                 }
+
+                if(entry.GetType() == typeof(User))
+                {
+                    var entity = entry.Entity as User;
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            entity.CreatedBy = _currentUserService.UserId;
+                            entity.Created = _dateTime.Now;
+                            break;
+
+                        case EntityState.Modified:
+                            entity.LastModifiedBy = _currentUserService.UserId;
+                            entity.LastModified = _dateTime.Now;
+                            break;
+                    }
+
+                }
+
             }
+
 
             var result = await base.SaveChangesAsync(cancellationToken);
 
@@ -65,7 +92,10 @@ namespace MentorMenteeApp.Infrastructure.Persistence
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+
             base.OnModelCreating(builder);
+
+            builder.Entity<User>();
 
             builder.Entity<User>()
                 .HasMany(u => u.MenteeSessions);
@@ -74,7 +104,7 @@ namespace MentorMenteeApp.Infrastructure.Persistence
                 .HasMany(u => u.MentorSkills);
 
             builder.Entity<User>()
-            .   HasMany(u => u.MenteeSkills);
+            .HasMany(u => u.MenteeSkills);
 
             builder.Entity<User>()
                 .HasMany(u => u.MenteeWorkShop);
@@ -85,7 +115,7 @@ namespace MentorMenteeApp.Infrastructure.Persistence
                 .HasMany(u => u.MentorSessions);
 
             builder.Entity<Skill>()
-                .HasOne(s=>s.SkillGroup);
+                .HasOne(s => s.SkillGroup);
 
             builder.Entity<Skill>()
                 .HasMany(s => s.MentorSkillUsers);

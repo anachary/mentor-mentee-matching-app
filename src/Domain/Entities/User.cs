@@ -1,4 +1,5 @@
 ﻿using MentorMenteeApp.Domain.Common;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,12 @@ using System.Threading.Tasks;
 
 namespace MentorMenteeApp.Domain.Entities
 {
-    public class User : AuditableEntity
+    public class User : IdentityUser
     {
-        public int UserId { get; set; }
+       
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
        
         public string UserEmail { get; set; }
 
@@ -31,5 +35,12 @@ namespace MentorMenteeApp.Domain.Entities
         public List<Workshop> MenteeWorkShop { get; protected set; } = new List<Workshop>();
 
         public List<Workshop> MentorWorkshop { get; protected set; } = new List<Workshop>();
+        public DateTime Created { get; set; }
+
+        public string CreatedBy { get; set; }
+
+        public DateTime? LastModified { get; set; }
+
+        public string LastModifiedBy { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MentorMenteeApp.Application.Common.Interfaces;
 using MentorMenteeApp.Application.Common.Models;
+using MentorMenteeApp.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,13 +11,13 @@ namespace MentorMenteeApp.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
+        private readonly UserManager<User> _userManager;
+        private readonly IUserClaimsPrincipalFactory<User> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
 
         public IdentityService(
-            UserManager<ApplicationUser> userManager,
-            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
+            UserManager<User> userManager,
+            IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory,
             IAuthorizationService authorizationService)
         {
             _userManager = userManager;
@@ -33,7 +34,7 @@ namespace MentorMenteeApp.Infrastructure.Identity
 
         public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
         {
-            var user = new ApplicationUser
+            var user = new User
             {
                 UserName = userName,
                 Email = userName,
@@ -74,7 +75,7 @@ namespace MentorMenteeApp.Infrastructure.Identity
             return Result.Success();
         }
 
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
+        public async Task<Result> DeleteUserAsync(User user)
         {
             var result = await _userManager.DeleteAsync(user);
 
